@@ -1,0 +1,25 @@
+/**
+ * 4-bit Johnson Counter
+ * Cyclically shifts a single '1' through the 4-bit register.
+ */
+
+CHIP JohnsonCounter {
+    IN clock;     // Clock input
+    OUT out[4];   // 4-bit output of the counter
+
+    PARTS:
+    // Flip-flops to store the 4 bits of the counter
+    DFF(in=feedback, out=dff0);
+    DFF(in=dff0, out=dff1);
+    DFF(in=dff1, out=dff2);
+    DFF(in=dff2, out=dff3);
+
+    // Feedback logic for Johnson counter
+    Not(in=dff3, out=feedback);
+
+    // Connect the DFF outputs to the output pins
+    Or(a=dff0, b=false, out=out[0]);
+    Or(a=dff1, b=false, out=out[1]);
+    Or(a=dff2, b=false, out=out[2]);
+    Or(a=dff3, b=false, out=out[3]);
+}
